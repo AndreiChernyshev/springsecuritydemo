@@ -1,7 +1,5 @@
 package space.cheran.springsecuritydemo.rest;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +11,8 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/v1/developers")
-@EnableMethodSecurity
 public class DeveloperRestControllerV1 {
-    private List<Developer> DEVELOPERS = Stream.of(
+    private final List<Developer> DEVELOPERS = Stream.of(
             new Developer(1L, "Ivan", "Ivanov"),
             new Developer(2L, "Sergey", "Sergeev"),
             new Developer(3L, "Petr",  "Petrov")
@@ -31,4 +28,5 @@ public class DeveloperRestControllerV1 {
                 .findFirst()
                 .orElse(null);
     }
+
 }
