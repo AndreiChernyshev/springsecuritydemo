@@ -1,5 +1,6 @@
 package space.cheran.springsecuritydemo.rest;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,14 @@ private final List<Developer> developers = Stream.of(
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
-
-
+    @GetMapping("/developers-read")
+    @PreAuthorize("hasAuthority('developers:read')")
+    public String authorityRead(){
+        return "This is for developers:read authorities";
+    }
+    @GetMapping("/developers-write")
+    @PreAuthorize("hasAuthority('developers:write')")
+    public String authorityWrite(){
+        return "This is for developers:write authorities";
+    }
 }

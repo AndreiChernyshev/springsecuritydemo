@@ -1,8 +1,8 @@
 package space.cheran.springsecuritydemo.model;
 
 public enum Permissions {
-    DEVELOPERS_READ("developers.read"),
-    DEVELOPERS_WRITE("developers.write");
+    DEVELOPERS_READ("developers:read"),
+    DEVELOPERS_WRITE("developers:write");
 
     private String permission;
 
