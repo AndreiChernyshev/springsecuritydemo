@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import space.cheran.springsecuritydemo.model.Permissions;
 import space.cheran.springsecuritydemo.model.Role;
 
 @Configuration
@@ -24,9 +25,9 @@ public class SecurityConf {
                         .ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers("/*").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                        .requestMatchers(HttpMethod.POST, "/api/v1/developers").hasAnyRole(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET,"/api/**").hasAuthority(Permissions.DEVELOPERS_READ.getPermission())
+                        .requestMatchers(HttpMethod.POST, "/api/v1/developers").hasAuthority(Permissions.DEVELOPERS_WRITE.getPermission())
+                        .requestMatchers(HttpMethod.DELETE, "/api/**").hasAnyAuthority(Permissions.DEVELOPERS_WRITE.getPermission())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -41,12 +42,12 @@ public class SecurityConf {
                 User.builder()
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
-                        .roles(Role.ADMIN.name())
+                        .authorities(Role.ADMIN.getAuthorities())
                         .build(),
                 User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("user"))
-                        .roles(Role.USER.name())
+                        .authorities(Role.USER.getAuthorities())
                         .build()
         );
     }
