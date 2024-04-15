@@ -1,9 +1,10 @@
 package space.cheran.springsecuritydemo.rest;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import space.cheran.springsecuritydemo.model.Developer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
 @RequestMapping("api/v1/developers")
 public class DeveloperRestControllerV1 {
 
-private List<Developer> developers = Stream.of(
+private final List<Developer> developers = Stream.of(
                 new Developer(1L, "Ivan", "Ivanov"),
                 new Developer(2L, "Sergey", "Sergeev"),
                 new Developer(3L, "Petr",  "Petrov")
@@ -22,6 +23,7 @@ private List<Developer> developers = Stream.of(
        public List<Developer> getAll(){
        return developers;
     }
+
     @GetMapping("{id}")
     public Developer getById(@PathVariable Long id){
         return developers.stream().filter(developer -> developer.getId().equals(id))
@@ -34,8 +36,15 @@ private List<Developer> developers = Stream.of(
         return developer;
     }
     @DeleteMapping("{id}")
-    public void deleteById(@PathVariable Long id){
+    public String deleteById(@PathVariable Long id){
         this.developers.removeIf(developer -> developer.getId().equals(id));
+        return "Developer deleted with id: " + id;
+    }
+    //Example with authentication object
+    @GetMapping("/username")
+    public String getUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 
 }
