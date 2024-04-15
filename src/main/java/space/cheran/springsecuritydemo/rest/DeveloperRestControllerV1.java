@@ -46,5 +46,6 @@ private final List<Developer> developers = Stream.of(
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
+    //test commit
 
 }
